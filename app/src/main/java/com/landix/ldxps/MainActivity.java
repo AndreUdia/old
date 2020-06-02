@@ -3,15 +3,21 @@ package com.landix.ldxps;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.AdapterView;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Spinner spinner_vendedores;
+    private Spinner spinnerVendedores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,19 +26,58 @@ public class MainActivity extends AppCompatActivity {
 
         // Propriedades do Spinner para seleção dos vendedores em Home
 
-        ArrayList<String> arr_vendedores = new ArrayList<String>();
-        arr_vendedores.add("TODOS");
-        arr_vendedores.add("vendedor1");
-        arr_vendedores.add("vendedor2");
-        arr_vendedores.add("vendedor3");
+        List<Vendedor> arr_vendedores = new ArrayList<>();
+        Vendedor um = new Vendedor("um", 1, transformarData("10/05/2010"));
+        Vendedor dois = new Vendedor("dois", 2, transformarData("10/08/2000"));
+        Vendedor tres = new Vendedor("tres", 3, transformarData("01/05/2003"));
+        Vendedor quatro = new Vendedor("quatro", 4, transformarData("08/09/2001"));
+        arr_vendedores.add(um);
+        arr_vendedores.add(dois);
+        arr_vendedores.add(tres);
+        arr_vendedores.add(quatro);
 
-        ArrayAdapter<String> adapter_vendedores = new ArrayAdapter<String>(this,
-                android.R. layout.simple_spinner_dropdown_item, arr_vendedores);
+        // Dados do adaptador para exibição de itens no Spinner
+        ArrayAdapter<Vendedor> adapter_vendedores = new ArrayAdapter<>(this,
+                android.R. layout.simple_spinner_item, arr_vendedores);
+        adapter_vendedores.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner_vendedores = (Spinner) findViewById(R.id.home_spinner_ven);
+        spinnerVendedores = findViewById(R.id.home_spinner_ven);
 
-        spinner_vendedores.setAdapter( adapter_vendedores );
+        spinnerVendedores.setAdapter( adapter_vendedores );
 
-        //spinner_vendedores.setOnItemClickListener();
+        for (int i=0; i<arr_vendedores.size(); i++  ) {
+            System.out.println(arr_vendedores.get(i).getCodigoVendedor());
+        }
+
+    }
+
+    public void editarVendedor(View view) {
+        Vendedor vendedorSelecionado = (Vendedor) spinnerVendedores.getSelectedItem();
+        mostrarDadosVendedor(vendedorSelecionado);
+    }
+
+    private void mostrarDadosVendedor(Vendedor vendedor) {
+        String nomeVendedor = vendedor.getNomeVendedor();
+        UUID codigoVendedor = vendedor.getCodigoVendedor();
+        Integer tabelaPrecosPadrao = vendedor.getTabelaPrecosPadrao();
+        Date dataNascimentoVendedor = vendedor.getDataNascimentoVendedor();
+
+        String dadosVendedor = "Nome: " + nomeVendedor
+                                + "\nUUID: " + codigoVendedor
+                                + "\nTabela: " + tabelaPrecosPadrao
+                                + "\nDataNascimento: " + dataNascimentoVendedor;
+
+        Toast.makeText(this, dadosVendedor, Toast.LENGTH_LONG).show();
+    }
+
+    private Date transformarData(String dataEmString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date data = null;
+        try {
+            data = sdf.parse(dataEmString);
+        } catch (ParseException e) {
+            System.err.println("Erro ao transformar a data");
+        }
+        return  data;
     }
 }
