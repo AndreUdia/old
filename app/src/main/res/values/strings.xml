@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">LdxPS</string>
-    <string name="vendedores">Vendedores</string>
-    <string name="visualizar">Visualizar / Selecionar</string>
+    <string name="home_vendedor">Vendedor</string>
+    <string name="home_visualizar">Visualizar / Selecionar</string>
+    <string name="clientes">Clientes</string>
+    <string name="home_manutencao">Manutenção</string>
+    <string name="home_criar_ven">Criar Vendedor</string>
+    <string name="home_criar_cli">Criar Cliente</string>
+    <string name="home_lista_clientes">Lista de Clientes</string>
+    <string name="home_txt_selecionar">Selecionar Vendedor</string>
 </resources>
